@@ -1,0 +1,59 @@
+package com.zchadli.myrestauservice.entities;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String username;
+    @Column(name="first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    private String password;
+    private String imagePath;
+    @Column(name="phone_number")
+    private String phoneNumber;
+    private String sex;
+    
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate birthDate;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+        name="users_roles", 
+        joinColumns = @JoinColumn(name="user_id"),
+        inverseJoinColumns = @JoinColumn(name="role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    
+    @OneToMany(mappedBy = "user")
+    private Set<Review> reviews = new HashSet<>();
+}
