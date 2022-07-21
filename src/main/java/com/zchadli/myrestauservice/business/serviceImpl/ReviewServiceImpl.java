@@ -16,8 +16,8 @@ import com.zchadli.myrestauservice.dto.ReviewDto;
 import com.zchadli.myrestauservice.dto.UserDto;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 import com.zchadli.myrestauservice.entities.Product;
+import com.zchadli.myrestauservice.entities.RestauUser;
 import com.zchadli.myrestauservice.entities.Review;
-import com.zchadli.myrestauservice.entities.User;
 import com.zchadli.myrestauservice.mapper.RestauMapper;
 import com.zchadli.myrestauservice.repositories.ReviewRespository;
 
@@ -47,7 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
     public PaginationResponse findSearch(int page, int size, String keyword, Long idProduct, String username, int isApproved) {
         Pageable pageable = PageRequest.of(page, size,  Sort.unsorted());
         Page<Review> reviews = null;
-        User user = null;
+        RestauUser user = null;
         Product product = null; 
         if(!username.equals("")) {
             UserDto userDto = userService.findByUsername(username);

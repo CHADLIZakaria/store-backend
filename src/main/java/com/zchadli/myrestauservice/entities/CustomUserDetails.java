@@ -12,11 +12,11 @@ import lombok.Data;
 public class CustomUserDetails implements UserDetails {
     private String username;
     private String password;
-    private User user;
+    private RestauUser user;
     Collection<? extends GrantedAuthority> authorities=null;
     private String imagePath;
 
-    public User getUser() {
+    public RestauUser getUser() {
         return user;
     }
     public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority>  authorities, String imagePath) {
