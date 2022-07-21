@@ -28,6 +28,6 @@ public class MyRestauServiceApplication implements CommandLineRunner {
     @Bean
     public BCryptPasswordEncoder  passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
+	}
 
 }
