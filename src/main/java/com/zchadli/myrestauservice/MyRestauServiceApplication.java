@@ -21,9 +21,8 @@ public class MyRestauServiceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		fileService.init(); 
+		fileService.init();
 	}
-
 	
     @Bean
     public BCryptPasswordEncoder  passwordEncoder() {

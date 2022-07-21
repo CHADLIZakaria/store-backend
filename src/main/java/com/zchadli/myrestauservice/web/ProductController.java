@@ -42,13 +42,13 @@ public class ProductController {
         return productService.save(productDto, file);
     }
 
-    @RequestMapping(value = "/product/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/admin/product/{id}", method = RequestMethod.PUT)
     public ProductDto update(ProductDto productDto, @PathVariable Long id, @RequestParam("file") MultipartFile file) {
         productDto.setId(id);
         return productService.save(productDto, file);
     }
 
-    @RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/admin/product/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Long id) {
         productService.deleteById(id);
     }

@@ -11,9 +11,9 @@ import com.zchadli.myrestauservice.dto.SizeDto;
 import com.zchadli.myrestauservice.dto.UserDto;
 import com.zchadli.myrestauservice.entities.Category;
 import com.zchadli.myrestauservice.entities.Product;
+import com.zchadli.myrestauservice.entities.RestauUser;
 import com.zchadli.myrestauservice.entities.Review;
 import com.zchadli.myrestauservice.entities.Size;
-import com.zchadli.myrestauservice.entities.User;
 
 @Mapper(componentModel = "spring")
 public interface RestauMapper {
@@ -34,10 +34,10 @@ public interface RestauMapper {
     SizeDto toSizeDto(Size size);
 
 
-    User toUser(UserDto userDto);
-    UserDto toUserDto(User user);
-    List<User> toUsers(List<UserDto> usersDto);
-    List<UserDto> toUsersDto(List<User> users);
+    RestauUser toUser(UserDto userDto);
+    UserDto toUserDto(RestauUser user);
+    List<RestauUser> toUsers(List<UserDto> usersDto);
+    List<UserDto> toUsersDto(List<RestauUser> users);
 
     Review toReview(ReviewDto reviewDto);
     ReviewDto toReviewDto(Review review);

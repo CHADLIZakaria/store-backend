@@ -24,8 +24,8 @@ import com.zchadli.myrestauservice.business.service.UserService;
 import com.zchadli.myrestauservice.dto.UserDto;
 import com.zchadli.myrestauservice.entities.CustomUserDetails;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
+import com.zchadli.myrestauservice.entities.RestauUser;
 import com.zchadli.myrestauservice.entities.Role;
-import com.zchadli.myrestauservice.entities.User;
 import com.zchadli.myrestauservice.mapper.RestauMapper;
 import com.zchadli.myrestauservice.repositories.UserRepository;
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public UserDto saveUser(UserDto userDto, MultipartFile file) {
-        User user = mapper.toUser(userDto);
+        RestauUser user = mapper.toUser(userDto);
         String pathName = fileService.save(file);
         user.setImagePath(pathName);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = mapper.toUser(findByUsername(username));
+        RestauUser user = mapper.toUser(findByUsername(username));
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().stream().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public PaginationResponse searchUser(int page, int size, String keyword, String username, String roleName) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<User> users = null;
+        Page<RestauUser> users = null;
         if(roleName == null || roleName == "") {
             users = userRepository.findByUsernameNotAndUsernameContaining(username, keyword, pageable);
         }

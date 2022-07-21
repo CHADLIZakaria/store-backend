@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
-//@CrossOrigin(origins = "*")
 public class CategoryController {
     private final CategoryService categoryService;
     
@@ -36,12 +35,12 @@ public class CategoryController {
         return categoryService.save(category, file);
     }
 
-    @RequestMapping(value = "/category/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/admin/category/{id}", method = RequestMethod.PUT)
     public CategoryDto update(CategoryDto category, @PathVariable Long id, @RequestParam(name="file", required = false) MultipartFile file) {
         return categoryService.update(id, category, file);
     }
 
-    @RequestMapping(value = "/category/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/admin/category/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Long id) {
         categoryService.deleteById(id);
     }

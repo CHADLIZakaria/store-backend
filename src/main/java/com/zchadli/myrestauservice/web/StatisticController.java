@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class StatisticController {
     private final StatisticService statisticService;
     
-    @RequestMapping(value="/stats", method = RequestMethod.GET)
+    @RequestMapping(value="/admin/stats", method = RequestMethod.GET)
     public Stats findStats() {
         return statisticService.getStatistics();
     }

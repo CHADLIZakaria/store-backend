@@ -22,7 +22,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @RequestMapping(value="/review", method = RequestMethod.POST)
+    @RequestMapping(value="/user/review", method = RequestMethod.POST)
     public ReviewDto save(@RequestBody ReviewDto reviewDto) {
         return reviewService.save(reviewDto);
     }
@@ -49,7 +49,7 @@ public class ReviewController {
         reviewService.deleteById(idReview);
     }
 
-    @RequestMapping(value="/review/toggleApprove/{idReview}", method = RequestMethod.PUT)
+    @RequestMapping(value="/admin/review/toggleApprove/{idReview}", method = RequestMethod.PUT)
     public ReviewDto toggleApproveReview(@PathVariable Long idReview) {
         return reviewService.toggleApproveReview(idReview);
     }
