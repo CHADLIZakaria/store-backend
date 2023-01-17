@@ -16,6 +16,7 @@ import com.zchadli.myrestauservice.business.service.ProductService;
 import com.zchadli.myrestauservice.business.service.SizeService;
 import com.zchadli.myrestauservice.dto.CategoryDto;
 import com.zchadli.myrestauservice.dto.ProductDto;
+import com.zchadli.myrestauservice.entities.Category;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 import com.zchadli.myrestauservice.entities.Product;
 import com.zchadli.myrestauservice.exceptions.BusinessException;
@@ -93,7 +94,8 @@ public class ProductServiceImpl implements ProductService {
                 CategoryDto categoryDto = categoryService.findById(Long.parseLong(ids[i]));
                 categoriesDto.add(categoryDto);
             }
-            products = productRepository.findByCategoryIn(mapper.toCategories(categoriesDto), pageable);
+            List<Category> categories = mapper.toCategories(categoriesDto);
+            products = productRepository.findByCategoryInAndTitleContaining(categories, keyword, pageable);
         }
         return new PaginationResponse(
             products.getTotalElements(), 
