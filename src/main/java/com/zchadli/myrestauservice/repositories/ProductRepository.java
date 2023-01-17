@@ -12,8 +12,11 @@ import com.zchadli.myrestauservice.entities.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByCategory(Category category);
     Page<Product> findByTitleContaining(String title, Pageable pageable);
     Page<Product> findByTitleContainingAndCategory(String title, Category category, Pageable pageable);
+
+    List<Product> findByCategoryIn(List<Category> categories);
+    Page<Product> findByCategoryIn(List<Category> categories, Pageable pageable);
+    
     
 }

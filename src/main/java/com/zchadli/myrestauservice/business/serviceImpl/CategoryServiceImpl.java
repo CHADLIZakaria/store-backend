@@ -67,5 +67,12 @@ public class CategoryServiceImpl implements CategoryService {
     public Long getNumberCategories() {
         return categoryRepository.count();
     }
+
+    @Override
+    public List<CategoryDto> searchCategories(String keyword) {
+        return mapper.toCategoriesDto(categoryRepository.findByNameContaining(keyword));
+    }
+
+    
     
 }

@@ -12,9 +12,7 @@ public interface ProductService {
     public List<ProductDto> findAll();
     public void deleteById(Long id);
     public ProductDto findById(Long id);
-    public List<ProductDto> searchByCategory(String categoryName);
-    
     public PaginationResponse findSearch(int page, int size, String keyword, String categoryName);
-    
     public Long getNumberPoruducts();
+    public List<ProductDto> findByCategoryIn(String idsCategories);
 }

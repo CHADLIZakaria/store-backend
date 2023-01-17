@@ -23,13 +23,8 @@ public class ProductController {
     private final ProductService productService;
     
     @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public List<ProductDto> findAll() {
-        return productService.findAll();
-    }
-
-    @RequestMapping(value = "/products/category/{categoryName}", method = RequestMethod.GET)
-    public List<ProductDto> searchByCategory(@PathVariable String categoryName) {
-        return productService.searchByCategory(categoryName);
+    public List<ProductDto> findAll(@RequestParam(defaultValue = "", required = false) String idsCategory) {
+        return productService.findByCategoryIn(idsCategory);
     }
 
     @RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
@@ -37,7 +32,7 @@ public class ProductController {
         return productService.findById(id);
     }
 
-    @RequestMapping(value = "/admin/product", method = RequestMethod.POST)
+    @RequestMapping(value = "/product", method = RequestMethod.POST)
     public ProductDto save(ProductDto productDto, @RequestParam("file") MultipartFile file) {
         return productService.save(productDto, file);
     }
@@ -48,7 +43,7 @@ public class ProductController {
         return productService.save(productDto, file);
     }
 
-    @RequestMapping(value = "/admin/product/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Long id) {
         productService.deleteById(id);
     }
@@ -59,7 +54,7 @@ public class ProductController {
         @RequestParam(name="page", defaultValue = "0") int page,
         @RequestParam(name="size", defaultValue = "3") int size,
         @RequestParam(name="keyword", defaultValue = "") String keyword,
-        @RequestParam(name="category", defaultValue = "") String categoryName
+        @RequestParam(name="idsCategory", defaultValue = "") String categoryName
     ) {
         return productService.findSearch(page, size, keyword, categoryName);
     }

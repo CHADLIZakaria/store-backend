@@ -14,4 +14,5 @@ public interface CategoryService {
     public CategoryDto findById(Long id);
     public CategoryDto findByCategoryName(String categoryName);
     public Long getNumberCategories();
+    public List<CategoryDto> searchCategories(String keyword);
 }

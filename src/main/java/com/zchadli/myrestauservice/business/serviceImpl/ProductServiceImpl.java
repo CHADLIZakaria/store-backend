@@ -16,7 +16,6 @@ import com.zchadli.myrestauservice.business.service.ProductService;
 import com.zchadli.myrestauservice.business.service.SizeService;
 import com.zchadli.myrestauservice.dto.CategoryDto;
 import com.zchadli.myrestauservice.dto.ProductDto;
-import com.zchadli.myrestauservice.entities.Category;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 import com.zchadli.myrestauservice.entities.Product;
 import com.zchadli.myrestauservice.exceptions.BusinessException;
@@ -76,29 +75,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> searchByCategory(String categoryName) {
-        CategoryDto categoryDto = categoryService.findByCategoryName(categoryName);
-        if (categoryDto == null)
-            return new ArrayList<ProductDto>();
-        return mapper.toProductsDto(
-                productRepository.findByCategory(mapper.toCategory(categoryDto)));
-    }
-
-    @Override
     public Long getNumberPoruducts() {
         return productRepository.count();
     }
 
     @Override
-    public PaginationResponse findSearch(int page, int size, String keyword, String categoryName) {
+    public PaginationResponse findSearch(int page, int size, String keyword, String idsCategories) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> products = null;
-        if(categoryName.equals("")) {
+        if(idsCategories.equals("")) {
             products = productRepository.findByTitleContaining(keyword, pageable);
         }
         else {
-            Category category = mapper.toCategory(categoryService.findByCategoryName(categoryName));
-            products = productRepository.findByTitleContainingAndCategory(keyword, category, pageable);
+            String[] ids = idsCategories.split(",");
+            List<CategoryDto> categoriesDto = new ArrayList<>();
+            for (int i = 0; i < ids.length; i++) {
+                CategoryDto categoryDto = categoryService.findById(Long.parseLong(ids[i]));
+                categoriesDto.add(categoryDto);
+            }
+            products = productRepository.findByCategoryIn(mapper.toCategories(categoriesDto), pageable);
         }
         return new PaginationResponse(
             products.getTotalElements(), 
@@ -106,6 +101,18 @@ public class ProductServiceImpl implements ProductService {
             products.getTotalPages(), 
             page, 
             mapper.toProductsDto(products.getContent()));
+    }
+
+    @Override
+    public List<ProductDto> findByCategoryIn(String idsCategories) {
+        if(idsCategories.equals("")) return mapper.toProductsDto(productRepository.findAll());
+        String[] ids = idsCategories.split(",");
+        List<CategoryDto> categoriesDto = new ArrayList<>();
+        for (int i = 0; i < ids.length; i++) {
+            CategoryDto categoryDto = categoryService.findById(Long.parseLong(ids[i]));
+            categoriesDto.add(categoryDto);
+        }
+        return mapper.toProductsDto(productRepository.findByCategoryIn(mapper.toCategories(categoriesDto)));
     }
 
 }
