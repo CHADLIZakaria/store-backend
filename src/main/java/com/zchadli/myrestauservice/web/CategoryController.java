@@ -35,8 +35,8 @@ public class CategoryController {
         return categoryService.findById(id);
     }
 
-    @RequestMapping(value = "/category", method = RequestMethod.POST)
-    public CategoryDto save(CategoryDto category, @RequestParam("file") MultipartFile file) {
+    @RequestMapping(value = "/admin/category", method = RequestMethod.POST)
+    public CategoryDto save(CategoryDto category, @RequestParam(required = true, value = "file") MultipartFile file) {
         return categoryService.save(category, file);
     }
 
@@ -45,7 +45,7 @@ public class CategoryController {
         return categoryService.update(id, category, file);
     }
 
-    @RequestMapping(value = "/category/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/admin/category/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Long id) {
         categoryService.deleteById(id);
     }
