@@ -2,6 +2,7 @@ package com.zchadli.myrestauservice.entities;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -42,7 +43,7 @@ public class RestauUser {
     @Column(name="phone_number")
     private String phoneNumber;
     private String sex;
-    
+    private String email;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
 
