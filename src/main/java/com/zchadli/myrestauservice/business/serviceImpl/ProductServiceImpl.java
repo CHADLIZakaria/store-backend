@@ -62,6 +62,12 @@ public class ProductServiceImpl implements ProductService {
         return mapper.toProductsDto(productRepository.findAll());
     }
 
+    public List<ProductDto> findByIdNot(Long id) {
+        List<Product> products = productRepository.findAll();
+        if (products.size() == 0) return new ArrayList<ProductDto>();
+        return mapper.toProductsDto(productRepository.findByIdNot(id));
+    }
+
     @Override
     public void deleteById(Long id) {
         ProductDto productDto = findById(id);

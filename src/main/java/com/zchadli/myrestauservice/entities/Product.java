@@ -28,6 +28,7 @@ public class Product {
     private String title;
     private double price;
     private String imagePath;
+    private String description;
     
     @ManyToOne
     @JoinColumn(name = "id_category")
@@ -35,6 +36,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Size> sizes = new ArrayList<Size>();
+
     
     /*
     @OneToMany(mappedBy = "product")

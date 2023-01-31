@@ -15,4 +15,6 @@ public interface ProductService {
     public PaginationResponse findSearch(int page, int size, String keyword, String categoryName);
     public Long getNumberPoruducts();
     public List<ProductDto> findByCategoryIn(String idsCategories);
+
+    public List<ProductDto> findByIdNot(Long id);
 }

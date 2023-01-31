@@ -27,6 +27,11 @@ public class ProductController {
         return productService.findByCategoryIn(idsCategory);
     }
 
+    @RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
+    public List<ProductDto> findAll(@PathVariable Long id) {
+        return productService.findByIdNot(id);
+    }
+
     @RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
     public ProductDto findById(@PathVariable Long id) {
         return productService.findById(id);
