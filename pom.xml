@@ -7,18 +7,13 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.7.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
-		 <properties>
-			<maven.compiler.target>17</maven.compiler.target>
-		</properties>
 	</parent>
 	<groupId>com.zchadli</groupId>
-	<artifactId>my-restau-service</artifactId>
+	<artifactId>store-back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>my-restau-service</name>
-	<description>Demo project for Spring Boot</description>
-	
+	<name>store-back</name>
+	<description>Backend for store application</description>
 	<dependencies>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

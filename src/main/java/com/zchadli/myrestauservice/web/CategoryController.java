@@ -2,11 +2,7 @@ package com.zchadli.myrestauservice.web;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zchadli.myrestauservice.business.service.CategoryService;
@@ -35,8 +31,8 @@ public class CategoryController {
         return categoryService.findById(id);
     }
 
-    @RequestMapping(value = "/admin/category", method = RequestMethod.POST)
-    public CategoryDto save(CategoryDto category, @RequestParam(required = true, value = "file") MultipartFile file) {
+    @RequestMapping(value = "/category", method = RequestMethod.POST)
+    public CategoryDto save(CategoryDto category, @RequestParam(value="file", required = false) MultipartFile file) {
         return categoryService.save(category, file);
     }
 

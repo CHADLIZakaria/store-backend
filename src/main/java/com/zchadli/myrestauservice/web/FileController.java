@@ -13,7 +13,6 @@ import com.zchadli.myrestauservice.business.service.FileService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-//@CrossOrigin(origins = "*")
 @RequestMapping(value="/api")
 @RequiredArgsConstructor
 public class FileController {

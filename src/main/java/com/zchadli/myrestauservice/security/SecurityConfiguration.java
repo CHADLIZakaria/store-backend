@@ -68,28 +68,11 @@ public class SecurityConfiguration  extends WebSecurityConfigurerAdapter{
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Collections.singletonList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "DELETE", "OPTIONS", "PUT"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-  
-    /*
-     
-    @Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-				.allowedOrigins("*")
-				.allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS");
-			}
-		};
-	}
-    */
-
 }
