@@ -53,11 +53,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if(userRepository.count() == 0) {
             user.getRoles().add(roleService.save(new Role(null, "ROLE_ADMIN")));
         }
-        else {
-        }
         return mapper.toUserDto(userRepository.save(user));
     }
-
 
     @Override
     public List<UserDto> findAll() {
@@ -102,14 +99,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public PaginationResponse searchUser(int page, int size, String keyword, String username, String roleName) {
         Pageable pageable = PageRequest.of(page, size);
         Page<RestauUser> users = null;
-        if(roleName == null || roleName == "") {
+        if(roleName == null || roleName.equals("")) {
             users = userRepository.findByUsernameNotAndUsernameContaining(username, keyword, pageable);
         }
         else {
             Role role = roleService.findByName("ROLE_"+roleName);
             users = userRepository.findByUsernameNotAndUsernameContainingAndRoles(username, keyword, role, pageable);
         }
-       
         return new PaginationResponse(users.getTotalElements(), size, users.getTotalPages(), page, mapper.toUsersDto(users.getContent()));   
     } 
     

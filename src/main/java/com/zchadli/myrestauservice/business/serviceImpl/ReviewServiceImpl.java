@@ -49,27 +49,25 @@ public class ReviewServiceImpl implements ReviewService {
         Page<Review> reviews = null;
         RestauUser user = null;
         Product product = null; 
-        if(!username.equals("")) {
+        if(!username.isEmpty()) {
             UserDto userDto = userService.findByUsername(username);
             user = mapper.toUser(userDto);
         }
-        if(idProduct != null) {
+        if(idProduct != -1) {
             ProductDto productDto = productService.findById(idProduct);
             product = mapper.toProduct(productDto);
         }
-
-
         if(isApproved == -1) {
-            if(username.equals("")) {
-                if(idProduct == null ) {
+            if(username.isEmpty()) {
+                if(idProduct == -1 ) {
                     reviews = reviewRespository.findByDescriptionContaining(keyword, pageable);
                 }
                 else {
                     reviews = reviewRespository.findByProductAndDescriptionContaining(product, keyword, pageable);
                 }
             }
-            else if(!username.equals("")) {
-                if(idProduct == null) {
+            else {
+                if(idProduct == -1) {
                     reviews = reviewRespository.findByUserAndDescriptionContaining(user, keyword, pageable);
                 }
                 else {
@@ -78,17 +76,17 @@ public class ReviewServiceImpl implements ReviewService {
             }    
         }
         else {
-            boolean approved = isApproved==1 ? true : false;
-            if(username.equals("")) {
-                if(idProduct == null ) {
+            boolean approved = isApproved == 1;
+            if(username.isEmpty()) {
+                if(idProduct == -1) {
                     reviews = reviewRespository.findByDescriptionContainingAndIsApproved(keyword, approved, pageable);
                 }
                 else {
                     reviews = reviewRespository.findByProductAndDescriptionContainingAndIsApproved(product, keyword, approved, pageable);
                 }
             }
-            else if(!username.equals("")) {
-                if(idProduct == null) {
+            else  {
+                if(idProduct == -1) {
                     reviews = reviewRespository.findByUserAndDescriptionContainingAndIsApproved(user, keyword, approved, pageable);
                 }
                 else {

@@ -6,11 +6,10 @@ import com.zchadli.myrestauservice.dto.ReviewDto;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 
 public interface ReviewService {
-    public ReviewDto save(ReviewDto reviewDto);
-    public List<ReviewDto> findAllByProduct(Long idProduct);
-    public void deleteById(Long idReview);
-    public ReviewDto toggleApproveReview(Long idReview);
-    public PaginationResponse findSearch(int page, int size, String keyword, Long idProduct, String username, int isApproved);
-    public Long getNumberReviews();
-    
+    ReviewDto save(ReviewDto reviewDto);
+    List<ReviewDto> findAllByProduct(Long idProduct);
+    void deleteById(Long idReview);
+    ReviewDto toggleApproveReview(Long idReview);
+    PaginationResponse findSearch(int page, int size, String keyword, Long idProduct, String username, int isApproved);
+    Long getNumberReviews();
 }

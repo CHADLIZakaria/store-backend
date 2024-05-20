@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.zchadli.myrestauservice.specification.ProductSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +19,6 @@ import com.zchadli.myrestauservice.business.service.ProductService;
 import com.zchadli.myrestauservice.business.service.SizeService;
 import com.zchadli.myrestauservice.dto.CategoryDto;
 import com.zchadli.myrestauservice.dto.ProductDto;
-import com.zchadli.myrestauservice.entities.Category;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 import com.zchadli.myrestauservice.entities.Product;
 import com.zchadli.myrestauservice.exceptions.BusinessException;
@@ -87,28 +89,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponse findSearch(int page, int size, String keyword, String idsCategories) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Product> products = null;
-        if(idsCategories.equals("")) {
-            products = productRepository.findByTitleContaining(keyword, pageable);
-        }
-        else {
-            String[] ids = idsCategories.split(",");
-            List<CategoryDto> categoriesDto = new ArrayList<>();
-            for (int i = 0; i < ids.length; i++) {
-                CategoryDto categoryDto = categoryService.findById(Long.parseLong(ids[i]));
-                categoriesDto.add(categoryDto);
-            }
-            List<Category> categories = mapper.toCategories(categoriesDto);
-            products = productRepository.findByCategoryInAndTitleContaining(categories, keyword, pageable);
-        }
+    public PaginationResponse findSearch(int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, String sortField, String sortDirection) {
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
+        Specification<Product> spec = Specification
+                .where(ProductSpecification.hasCategory(categories))
+                .and(ProductSpecification.hasKeyword(keyword))
+                .and(ProductSpecification.minPrice(minPrice))
+                .and(ProductSpecification.maxPrice(maxPrice));
+        Page<Product> products = productRepository.findAll(spec, pageable);
         return new PaginationResponse(
-            products.getTotalElements(), 
-            size, 
-            products.getTotalPages(), 
-            page, 
-            mapper.toProductsDto(products.getContent()));
+            products.getTotalElements(),
+            size,
+            products.getTotalPages(),
+            page,
+            mapper.toProductsDto(products.getContent())
+        );
     }
 
     @Override

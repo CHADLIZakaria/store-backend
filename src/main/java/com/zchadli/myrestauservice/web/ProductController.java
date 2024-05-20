@@ -2,11 +2,8 @@ package com.zchadli.myrestauservice.web;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zchadli.myrestauservice.business.service.ProductService;
@@ -59,8 +56,12 @@ public class ProductController {
         @RequestParam(name="page", defaultValue = "0") int page,
         @RequestParam(name="size", defaultValue = "3") int size,
         @RequestParam(name="keyword", defaultValue = "") String keyword,
-        @RequestParam(name="idsCategory", defaultValue = "") String categoryName
+        @RequestParam(name="categories", defaultValue = "", required = false) List<Integer> categories,
+        @RequestParam(name="minPrice", required = false) Double minPrice,
+        @RequestParam(name="maxPrice", required = false) Double maxPrice,
+        @RequestParam(name="sort", defaultValue = "id") String sortField,
+        @RequestParam(name="direction", defaultValue = "asc") String sortDirection
     ) {
-        return productService.findSearch(page, size, keyword, categoryName);
+        return productService.findSearch(page, size, keyword, categories, minPrice, maxPrice, sortField, sortDirection);
     }
 }

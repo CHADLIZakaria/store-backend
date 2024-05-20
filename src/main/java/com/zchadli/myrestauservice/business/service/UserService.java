@@ -8,11 +8,11 @@ import com.zchadli.myrestauservice.dto.UserDto;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 
 public interface UserService {
-    public UserDto saveUser(UserDto userDto, MultipartFile file);
-    public List<UserDto> findAll();
-    public void deleteById(Long id);
-    public UserDto findById(Long id);
-    public UserDto findByUsername(String username);
-    public Long getNumberUsers();
-    public PaginationResponse searchUser(int page, int size, String keyword, String username, String roleName);
+    UserDto saveUser(UserDto userDto, MultipartFile file);
+    List<UserDto> findAll();
+    void deleteById(Long id);
+    UserDto findById(Long id);
+    UserDto findByUsername(String username);
+    Long getNumberUsers();
+    PaginationResponse searchUser(int page, int size, String keyword, String username, String roleName);
 }

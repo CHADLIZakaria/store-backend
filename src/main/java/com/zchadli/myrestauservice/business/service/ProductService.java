@@ -2,6 +2,7 @@ package com.zchadli.myrestauservice.business.service;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zchadli.myrestauservice.dto.ProductDto;
@@ -12,7 +13,7 @@ public interface ProductService {
     public List<ProductDto> findAll();
     public void deleteById(Long id);
     public ProductDto findById(Long id);
-    public PaginationResponse findSearch(int page, int size, String keyword, String categoryName);
+    public PaginationResponse findSearch(int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, String sortField, String sortDirection);
     public Long getNumberPoruducts();
     public List<ProductDto> findByCategoryIn(String idsCategories);
 

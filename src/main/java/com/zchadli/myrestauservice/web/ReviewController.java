@@ -37,10 +37,9 @@ public class ReviewController {
         @RequestParam(name="page", defaultValue = "0") int page,
         @RequestParam(name="size", defaultValue = "5") int size,
         @RequestParam(name="keyword", defaultValue = "") String keyword,
-        @RequestParam(name="idProduct", required = false) Long idProduct,
+        @RequestParam(name="idProduct", defaultValue = "-1") Long idProduct,
         @RequestParam(name="username", defaultValue = "") String username,
-        @RequestParam(name="approved", defaultValue = "-1") int approved
-    ) {
+        @RequestParam(name="approved", defaultValue = "-1") int approved) {
         return reviewService.findSearch(page, size, keyword, idProduct, username, approved);
     }
     
