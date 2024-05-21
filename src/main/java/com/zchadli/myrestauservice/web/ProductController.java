@@ -2,6 +2,8 @@ package com.zchadli.myrestauservice.web;
 
 import java.util.List;
 
+import com.zchadli.myrestauservice.dto.CategoryCountDto;
+import com.zchadli.myrestauservice.dto.RangePriceCountDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,4 +66,10 @@ public class ProductController {
     ) {
         return productService.findSearch(page, size, keyword, categories, minPrice, maxPrice, sortField, sortDirection);
     }
+
+    @RequestMapping(value = "/products/prices/count", method = RequestMethod.GET)
+    public List<RangePriceCountDto> productCountByCategory() {
+        return productService.productCountByPriceRange();
+    }
+
 }

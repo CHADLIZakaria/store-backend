@@ -12,11 +12,11 @@ import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
 @RequiredArgsConstructor
-public class MyRestauServiceApplication implements CommandLineRunner {
+public class StoreApplication implements CommandLineRunner {
 	private final FileService fileService;
 
 	public static void main(String[] args) {
-		SpringApplication.run(MyRestauServiceApplication.class, args);
+		SpringApplication.run(StoreApplication.class, args);
 	}
 
 	@Override

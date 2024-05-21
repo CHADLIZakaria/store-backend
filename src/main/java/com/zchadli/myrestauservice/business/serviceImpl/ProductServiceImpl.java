@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.zchadli.myrestauservice.dto.CategoryCountDto;
+import com.zchadli.myrestauservice.dto.RangePriceCountDto;
 import com.zchadli.myrestauservice.specification.ProductSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,14 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.zchadli.myrestauservice.business.service.CategoryService;
 import com.zchadli.myrestauservice.business.service.FileService;
 import com.zchadli.myrestauservice.business.service.ProductService;
-import com.zchadli.myrestauservice.business.service.SizeService;
 import com.zchadli.myrestauservice.dto.CategoryDto;
 import com.zchadli.myrestauservice.dto.ProductDto;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 import com.zchadli.myrestauservice.entities.Product;
 import com.zchadli.myrestauservice.exceptions.BusinessException;
 import com.zchadli.myrestauservice.exceptions.ErrorsMessage;
-import com.zchadli.myrestauservice.mapper.RestauMapper;
+import com.zchadli.myrestauservice.mapper.StoreMapper;
 import com.zchadli.myrestauservice.repositories.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
-    private final SizeService sizeService;
-    private final RestauMapper mapper;
+    private final StoreMapper mapper;
     private final FileService fileService;
 
     @Override
@@ -46,14 +46,6 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = mapper.toProduct(productDto);
         ProductDto ProductDtoSaved = mapper.toProductDto(productRepository.save(product));
-        ProductDtoSaved.setSizes(
-            productDto.getSizes().stream().map((size) -> 
-                sizeService.save(
-                    size, 
-                    mapper.toProduct(findById(ProductDtoSaved.getId()))
-                ))
-            .collect(Collectors.toList())
-        );
         return ProductDtoSaved;
     }
 
@@ -117,6 +109,11 @@ public class ProductServiceImpl implements ProductService {
             categoriesDto.add(categoryDto);
         }
         return mapper.toProductsDto(productRepository.findByCategoryIn(mapper.toCategories(categoriesDto)));
+    }
+
+    @Override
+    public List<RangePriceCountDto> productCountByPriceRange() {
+        return productRepository.countProductsByPrice();
     }
 
 }

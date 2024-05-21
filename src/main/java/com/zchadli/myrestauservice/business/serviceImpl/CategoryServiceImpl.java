@@ -2,6 +2,7 @@ package com.zchadli.myrestauservice.business.serviceImpl;
 
 import java.util.List;
 
+import com.zchadli.myrestauservice.dto.CategoryCountDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +12,7 @@ import com.zchadli.myrestauservice.dto.CategoryDto;
 import com.zchadli.myrestauservice.entities.Category;
 import com.zchadli.myrestauservice.exceptions.BusinessException;
 import com.zchadli.myrestauservice.exceptions.ErrorsMessage;
-import com.zchadli.myrestauservice.mapper.RestauMapper;
+import com.zchadli.myrestauservice.mapper.StoreMapper;
 import com.zchadli.myrestauservice.repositories.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final FileService fileService;
-    private final RestauMapper mapper;
+    private final StoreMapper mapper;
 
     @Override
     public CategoryDto save(CategoryDto categoryDto, MultipartFile file) {
@@ -73,6 +74,10 @@ public class CategoryServiceImpl implements CategoryService {
         return mapper.toCategoriesDto(categoryRepository.findByNameContaining(keyword));
     }
 
-    
-    
+    @Override
+    public List<CategoryCountDto> productCountByCategory() {
+        return categoryRepository.countProductsByCategory();
+    }
+
+
 }

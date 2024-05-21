@@ -18,7 +18,7 @@ import com.zchadli.myrestauservice.entities.PaginationResponse;
 import com.zchadli.myrestauservice.entities.Product;
 import com.zchadli.myrestauservice.entities.RestauUser;
 import com.zchadli.myrestauservice.entities.Review;
-import com.zchadli.myrestauservice.mapper.RestauMapper;
+import com.zchadli.myrestauservice.mapper.StoreMapper;
 import com.zchadli.myrestauservice.repositories.ReviewRespository;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRespository reviewRespository;
-    private final RestauMapper mapper;
+    private final StoreMapper mapper;
     private final ProductService productService;
     private final UserService userService;
 

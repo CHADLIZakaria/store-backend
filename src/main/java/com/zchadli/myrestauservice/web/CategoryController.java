@@ -2,6 +2,7 @@ package com.zchadli.myrestauservice.web;
 
 import java.util.List;
 
+import com.zchadli.myrestauservice.dto.CategoryCountDto;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,11 @@ public class CategoryController {
     @RequestMapping(value = "/category/{id}", method = RequestMethod.GET)
     public CategoryDto findById(@PathVariable Long id) {
         return categoryService.findById(id);
+    }
+
+    @RequestMapping(value = "/category/product/count", method = RequestMethod.GET)
+    public List<CategoryCountDto> productCountByCategory() {
+        return categoryService.productCountByCategory();
     }
 
     @RequestMapping(value = "/category", method = RequestMethod.POST)

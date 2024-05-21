@@ -2,17 +2,19 @@ package com.zchadli.myrestauservice.business.service;
 
 import java.util.List;
 
+import com.zchadli.myrestauservice.dto.CategoryCountDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zchadli.myrestauservice.dto.CategoryDto;
 
 public interface CategoryService {
-    public CategoryDto save(CategoryDto categoryDto, MultipartFile file);
-    public CategoryDto update(Long idCategory, CategoryDto categoryDto, MultipartFile file);
-    public List<CategoryDto> findAll();
-    public void deleteById(Long id);
-    public CategoryDto findById(Long id);
-    public CategoryDto findByCategoryName(String categoryName);
-    public Long getNumberCategories();
-    public List<CategoryDto> searchCategories(String keyword);
+    CategoryDto save(CategoryDto categoryDto, MultipartFile file);
+    CategoryDto update(Long idCategory, CategoryDto categoryDto, MultipartFile file);
+    List<CategoryDto> findAll();
+    void deleteById(Long id);
+    CategoryDto findById(Long id);
+    CategoryDto findByCategoryName(String categoryName);
+    Long getNumberCategories();
+    List<CategoryDto> searchCategories(String keyword);
+    List<CategoryCountDto> productCountByCategory();
 }

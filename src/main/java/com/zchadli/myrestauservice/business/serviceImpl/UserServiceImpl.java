@@ -26,7 +26,7 @@ import com.zchadli.myrestauservice.entities.CustomUserDetails;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 import com.zchadli.myrestauservice.entities.RestauUser;
 import com.zchadli.myrestauservice.entities.Role;
-import com.zchadli.myrestauservice.mapper.RestauMapper;
+import com.zchadli.myrestauservice.mapper.StoreMapper;
 import com.zchadli.myrestauservice.repositories.UserRepository;
 
 @Service
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
-    private RestauMapper mapper;
+    private StoreMapper mapper;
     @Autowired
     private FileService fileService;
 
