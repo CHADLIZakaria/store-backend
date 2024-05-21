@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ErrorsMessage {
-    AUTHENTIFICATION_FAILED("Nom d’utilisateur ou mot de passe est incorrect", HttpStatus.UNAUTHORIZED),
-    USERNAME_NOT_FOUND("Nom d’utilisateur introuvable", HttpStatus.NOT_FOUND),
+    AUTHENTIFICATION_FAILED("Username or password is incorrect", HttpStatus.UNAUTHORIZED),
+    USERNAME_NOT_FOUND("Username not found", HttpStatus.NOT_FOUND),
     CATEGORY_NOT_FOUND("Category introuvable", HttpStatus.NOT_FOUND),
     PRODUCT_NOT_FOUND("Produit introuvable", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND("Role introuvable", HttpStatus.NOT_FOUND);

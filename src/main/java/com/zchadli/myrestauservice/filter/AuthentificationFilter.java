@@ -52,7 +52,7 @@ public class AuthentificationFilter extends UsernamePasswordAuthenticationFilter
     
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-    AuthenticationException failed) throws IOException, ServletException {
+    AuthenticationException failed) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         BusinessException exception = null;
