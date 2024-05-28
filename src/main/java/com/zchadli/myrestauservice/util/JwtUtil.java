@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zchadli.myrestauservice.entities.CustomUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,7 @@ public class JwtUtil {
     private int jwtExpirationInMs = 1000 * 60 * 60 * 24;
     private int refreshExpirationDateInMs = 0;
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(CustomUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<String, Object>();
         Collection<? extends GrantedAuthority> authorties = userDetails.getAuthorities();
         if(authorties.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
@@ -31,15 +32,20 @@ public class JwtUtil {
         else if(authorties.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
             claims.put("isUser", true);
         }
+        claims.put("imagePath", userDetails.getImagePath());
+        claims.put("username",  userDetails.getUsername());
         return createToken(claims, userDetails.getUsername());
     }
 
 
     private String createToken(Map<String, Object> claims, String subject) {
-        return 
-            Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date())
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
     }
 
     public String createRefreshToken(Map<String, Object> claims, String subject) {
