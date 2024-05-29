@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.zchadli.myrestauservice.dto.CategoryCountDto;
 import com.zchadli.myrestauservice.dto.RangePriceCountDto;
+import com.zchadli.myrestauservice.dto.ReviewCountDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,15 +62,21 @@ public class ProductController {
         @RequestParam(name="categories", defaultValue = "", required = false) List<Integer> categories,
         @RequestParam(name="minPrice", required = false) Double minPrice,
         @RequestParam(name="maxPrice", required = false) Double maxPrice,
+        @RequestParam(name="review", required = false) Integer review,
         @RequestParam(name="sort", defaultValue = "id") String sortField,
         @RequestParam(name="direction", defaultValue = "asc") String sortDirection
     ) {
-        return productService.findSearch(page, size, keyword, categories, minPrice, maxPrice, sortField, sortDirection);
+        return productService.findSearch(page, size, keyword, categories, minPrice, maxPrice, review, sortField, sortDirection);
     }
 
     @RequestMapping(value = "/products/prices/count", method = RequestMethod.GET)
     public List<RangePriceCountDto> productCountByCategory() {
         return productService.productCountByPriceRange();
+    }
+
+    @RequestMapping(value = "/products/reviews/count", method = RequestMethod.GET)
+    public List<ReviewCountDto> productCountByReview() {
+        return productService.productCountByReview();
     }
 
 }
