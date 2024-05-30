@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.zchadli.myrestauservice.dto.CategoryCountDto;
 import com.zchadli.myrestauservice.dto.RangePriceCountDto;
+import com.zchadli.myrestauservice.dto.ReviewCountDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,6 +29,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             "LEFT JOIN Product p ON p.price BETWEEN pr.minPrice AND COALESCE(pr.maxPrice, p.price) " +
             "GROUP BY pr.id, pr.minPrice, pr.maxPrice")
     List<RangePriceCountDto> countProductsByPrice();
-    
-    
+
+    @Query("SELECT new com.zchadli.myrestauservice.dto.ReviewCountDto(r.rating, COUNT(id_product)) " +
+            "FROM Review r " +
+            "GROUP BY r.rating")
+    List<ReviewCountDto> countProductsByReview();
 }

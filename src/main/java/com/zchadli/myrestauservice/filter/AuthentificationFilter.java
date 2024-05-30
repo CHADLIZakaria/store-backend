@@ -69,10 +69,10 @@ public class AuthentificationFilter extends UsernamePasswordAuthenticationFilter
  
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-            Authentication authentication) throws IOException, ServletException {
+            Authentication authentication) throws IOException {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         String access_token = jwtUtil.generateToken(user);
-        HashMap<String, Object> data = new HashMap<String, Object>();
+        HashMap<String, Object> data = new HashMap<>();
         data.put("access_token", access_token);
         data.put("isAdmin", jwtUtil.isAdmin(access_token));
         data.put("username", jwtUtil.getusernameFromToken(access_token));

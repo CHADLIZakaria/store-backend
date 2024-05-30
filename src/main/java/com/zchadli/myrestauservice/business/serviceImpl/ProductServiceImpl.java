@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.zchadli.myrestauservice.dto.CategoryCountDto;
-import com.zchadli.myrestauservice.dto.RangePriceCountDto;
+import com.zchadli.myrestauservice.dto.*;
 import com.zchadli.myrestauservice.specification.ProductSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.zchadli.myrestauservice.business.service.CategoryService;
 import com.zchadli.myrestauservice.business.service.FileService;
 import com.zchadli.myrestauservice.business.service.ProductService;
-import com.zchadli.myrestauservice.dto.CategoryDto;
-import com.zchadli.myrestauservice.dto.ProductDto;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 import com.zchadli.myrestauservice.entities.Product;
 import com.zchadli.myrestauservice.exceptions.BusinessException;
@@ -81,14 +78,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponse findSearch(int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, String sortField, String sortDirection) {
+    public PaginationResponse findSearch(int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection) {
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
         Specification<Product> spec = Specification
                 .where(ProductSpecification.hasCategory(categories))
                 .and(ProductSpecification.hasKeyword(keyword))
                 .and(ProductSpecification.minPrice(minPrice))
-                .and(ProductSpecification.maxPrice(maxPrice));
+                .and(ProductSpecification.maxPrice(maxPrice))
+                .and(ProductSpecification.review(review));
         Page<Product> products = productRepository.findAll(spec, pageable);
         return new PaginationResponse(
             products.getTotalElements(),
@@ -114,6 +112,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<RangePriceCountDto> productCountByPriceRange() {
         return productRepository.countProductsByPrice();
+    }
+
+    @Override
+    public List<ReviewCountDto> productCountByReview() {
+        return productRepository.countProductsByReview();
     }
 
 }
