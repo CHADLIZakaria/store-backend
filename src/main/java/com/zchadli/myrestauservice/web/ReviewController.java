@@ -35,12 +35,15 @@ public class ReviewController {
     @RequestMapping(value="/reviews/search", method = RequestMethod.GET)
     public PaginationResponse search(
         @RequestParam(name="page", defaultValue = "0") int page,
-        @RequestParam(name="size", defaultValue = "5") int size,
+        @RequestParam(name="size", defaultValue = "") Integer size,
         @RequestParam(name="keyword", defaultValue = "") String keyword,
-        @RequestParam(name="idProduct", defaultValue = "-1") Long idProduct,
+        @RequestParam(name="idProduct", defaultValue = "") Long idProduct,
         @RequestParam(name="username", defaultValue = "") String username,
-        @RequestParam(name="approved", defaultValue = "-1") int approved) {
-        return reviewService.findSearch(page, size, keyword, idProduct, username, approved);
+        @RequestParam(name="approved", defaultValue = "") Boolean approved,
+        @RequestParam(name="sort", defaultValue = "id") String sort,
+        @RequestParam(name="direction", defaultValue = "asc") String direction
+    ) {
+        return reviewService.findSearch(page, size, sort, direction, keyword, idProduct, username, approved);
     }
     
     @RequestMapping(value="/review/{idReview}", method = RequestMethod.DELETE)

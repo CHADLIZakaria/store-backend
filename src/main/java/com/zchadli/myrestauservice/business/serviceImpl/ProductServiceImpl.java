@@ -2,7 +2,6 @@ package com.zchadli.myrestauservice.business.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.zchadli.myrestauservice.dto.*;
 import com.zchadli.myrestauservice.specification.ProductSpecification;
@@ -49,13 +48,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> findAll() {
         List<Product> products = productRepository.findAll();
-        if (products.size() == 0) return new ArrayList<ProductDto>();
+        if (products.isEmpty()) return new ArrayList<>();
         return mapper.toProductsDto(productRepository.findAll());
     }
 
     public List<ProductDto> findByIdNot(Long id) {
         List<Product> products = productRepository.findAll();
-        if (products.size() == 0) return new ArrayList<ProductDto>();
+        if (products.isEmpty()) return new ArrayList<>();
         return mapper.toProductsDto(productRepository.findByIdNot(id));
     }
 
@@ -99,11 +98,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findByCategoryIn(String idsCategories) {
-        if(idsCategories.equals("")) return mapper.toProductsDto(productRepository.findAll());
+        if(idsCategories.isEmpty()) return mapper.toProductsDto(productRepository.findAll());
         String[] ids = idsCategories.split(",");
         List<CategoryDto> categoriesDto = new ArrayList<>();
-        for (int i = 0; i < ids.length; i++) {
-            CategoryDto categoryDto = categoryService.findById(Long.parseLong(ids[i]));
+        for (String id : ids) {
+            CategoryDto categoryDto = categoryService.findById(Long.parseLong(id));
             categoriesDto.add(categoryDto);
         }
         return mapper.toProductsDto(productRepository.findByCategoryIn(mapper.toCategories(categoriesDto)));

@@ -2,10 +2,8 @@ package com.zchadli.myrestauservice.web;
 
 import java.util.List;
 
-import com.zchadli.myrestauservice.dto.CategoryCountDto;
 import com.zchadli.myrestauservice.dto.RangePriceCountDto;
 import com.zchadli.myrestauservice.dto.ReviewCountDto;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,7 +50,6 @@ public class ProductController {
     public void delete(@PathVariable Long id) {
         productService.deleteById(id);
     }
-    
 
     @RequestMapping(value="/products/search", method = RequestMethod.GET)
     public PaginationResponse search(

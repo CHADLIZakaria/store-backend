@@ -10,6 +10,6 @@ public interface ReviewService {
     List<ReviewDto> findAllByProduct(Long idProduct);
     void deleteById(Long idReview);
     ReviewDto toggleApproveReview(Long idReview);
-    PaginationResponse findSearch(int page, int size, String keyword, Long idProduct, String username, int isApproved);
+    PaginationResponse findSearch(int page, Integer size, String sort, String direction, String keyword, Long idProduct, String username, Boolean isApproved);
     Long getNumberReviews();
 }

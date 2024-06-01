@@ -2,26 +2,26 @@ package com.zchadli.myrestauservice.business.serviceImpl;
 
 import java.util.List;
 
+import com.zchadli.myrestauservice.specification.ReviewSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.zchadli.myrestauservice.business.service.ProductService;
 import com.zchadli.myrestauservice.business.service.ReviewService;
 import com.zchadli.myrestauservice.business.service.UserService;
-import com.zchadli.myrestauservice.dto.ProductDto;
 import com.zchadli.myrestauservice.dto.ReviewDto;
-import com.zchadli.myrestauservice.dto.UserDto;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
 import com.zchadli.myrestauservice.entities.Product;
-import com.zchadli.myrestauservice.entities.RestauUser;
 import com.zchadli.myrestauservice.entities.Review;
 import com.zchadli.myrestauservice.mapper.StoreMapper;
 import com.zchadli.myrestauservice.repositories.ReviewRespository;
 
 import lombok.RequiredArgsConstructor;
+
 
 @Service
 @RequiredArgsConstructor
@@ -42,59 +42,29 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewDto> findAllByProduct(Long idProduct) {
         Product product = mapper.toProduct(productService.findById(idProduct));
         return mapper.toReviewsDto(reviewRespository.findByProductAndIsApprovedTrueOrderByCreatedAtDesc(product));
-    }   
-
-    public PaginationResponse findSearch(int page, int size, String keyword, Long idProduct, String username, int isApproved) {
-        Pageable pageable = PageRequest.of(page, size,  Sort.unsorted());
-        Page<Review> reviews = null;
-        RestauUser user = null;
-        Product product = null; 
-        if(!username.isEmpty()) {
-            UserDto userDto = userService.findByUsername(username);
-            user = mapper.toUser(userDto);
-        }
-        if(idProduct != -1) {
-            ProductDto productDto = productService.findById(idProduct);
-            product = mapper.toProduct(productDto);
-        }
-        if(isApproved == -1) {
-            if(username.isEmpty()) {
-                if(idProduct == -1 ) {
-                    reviews = reviewRespository.findByDescriptionContaining(keyword, pageable);
-                }
-                else {
-                    reviews = reviewRespository.findByProductAndDescriptionContaining(product, keyword, pageable);
-                }
-            }
-            else {
-                if(idProduct == -1) {
-                    reviews = reviewRespository.findByUserAndDescriptionContaining(user, keyword, pageable);
-                }
-                else {
-                    reviews = reviewRespository.findByProductAndUserAndDescriptionContaining(product, user, keyword, pageable);
-                }
-            }    
+    }
+    public PaginationResponse findSearch(int page, Integer size, String sort, String sortDirection, String keyword, Long idProduct, String username, Boolean isApproved) {
+        Pageable pageable;
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
+        if(size==null) {
+            pageable = Pageable.unpaged();
         }
         else {
-            boolean approved = isApproved == 1;
-            if(username.isEmpty()) {
-                if(idProduct == -1) {
-                    reviews = reviewRespository.findByDescriptionContainingAndIsApproved(keyword, approved, pageable);
-                }
-                else {
-                    reviews = reviewRespository.findByProductAndDescriptionContainingAndIsApproved(product, keyword, approved, pageable);
-                }
-            }
-            else  {
-                if(idProduct == -1) {
-                    reviews = reviewRespository.findByUserAndDescriptionContainingAndIsApproved(user, keyword, approved, pageable);
-                }
-                else {
-                    reviews = reviewRespository.findByProductAndUserAndDescriptionContainingAndIsApproved(product, user, keyword, approved, pageable);
-                }
-            }    
+            pageable = PageRequest.of(page, size, Sort.by(direction, sort));
         }
-        return new PaginationResponse(reviews.getTotalElements(), size, reviews.getTotalPages(), page, mapper.toReviewsDto(reviews.getContent()));
+        Specification<Review> specification = Specification
+                .where(ReviewSpecification.hasProduct(idProduct))
+                .and(ReviewSpecification.hasKeyword(keyword))
+                .and(ReviewSpecification.isApproved(isApproved))
+                .and(ReviewSpecification.hasUser(username));
+        Page<Review> reviews = reviewRespository.findAll(specification, pageable);
+        return new PaginationResponse(
+            reviews.getTotalElements(),
+            size==null ? 0 : size ,
+            reviews.getTotalPages(),
+            page,
+            mapper.toReviewsDto(reviews.getContent())
+        );
     }
 
     @Override
@@ -108,6 +78,8 @@ public class ReviewServiceImpl implements ReviewService {
         review.setApproved(!review.isApproved());
         return mapper.toReviewDto(reviewRespository.save(review));
     }
+
+
 
     @Override
     public Long getNumberReviews() {
