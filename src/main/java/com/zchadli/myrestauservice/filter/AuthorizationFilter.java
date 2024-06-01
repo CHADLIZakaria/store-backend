@@ -24,33 +24,17 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class AuthorizationFilter extends OncePerRequestFilter {
-
-   
     private final JwtUtil jwtUtil;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if(request.getServletPath().contains("/api/login")) {
-           
             filterChain.doFilter(request, response);
         }
         else {
             String jwtToken = extractJwtFromToken(request);
-            
-            
             if(StringUtils.hasText(jwtToken)) {
                 try {
-                    //String token = authorizationHeader.substring("Bearer ".length());
-                    //Algorithm algorithm = Algorithm.HMAC256("secret ".getBytes());
-                    //JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-                    //DecodedJWT decodedJwt = jwtVerifier.verify(token);
-                    //String username =  decodedJwt.getSubject();
-                    //String roles [] = decodedJwt.getClaim("roles").asArray(String.class);
-                    //Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    //Arrays.stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
-                    //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
-                    //SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(jwtUtil.getusernameFromToken(jwtToken), null, jwtUtil.getRolesFromToken(jwtToken));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request, response);
@@ -58,7 +42,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                 catch(Exception exception) {
                     response.setHeader("error", exception.getMessage());
                     response.setStatus(HttpStatus.FORBIDDEN.value());
-                    Map<String, String> error = new HashMap<String, String>();
+                    Map<String, String> error = new HashMap<>();
                     error.put("error message", exception.getMessage());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(), error);
