@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.zchadli.myrestauservice.dto.*;
+import com.zchadli.myrestauservice.entities.RestauUser;
+import com.zchadli.myrestauservice.repositories.UserRepository;
 import com.zchadli.myrestauservice.specification.ProductSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     private final CategoryService categoryService;
     private final StoreMapper mapper;
     private final FileService fileService;
@@ -41,8 +44,7 @@ public class ProductServiceImpl implements ProductService {
         productDto.setImagePath(filePath);
 
         Product product = mapper.toProduct(productDto);
-        ProductDto ProductDtoSaved = mapper.toProductDto(productRepository.save(product));
-        return ProductDtoSaved;
+        return mapper.toProductDto(productRepository.save(product));
     }
 
     @Override
@@ -74,6 +76,34 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Long getNumberPoruducts() {
         return productRepository.count();
+    }
+
+    @Override
+    public PaginationResponse findProductsWithFavorites(String username, int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection) {
+        RestauUser user = userRepository.findByUsername(username);
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
+        Specification<Product> spec = Specification
+                .where(ProductSpecification.hasCategory(categories))
+                .and(ProductSpecification.hasKeyword(keyword))
+                .and(ProductSpecification.minPrice(minPrice))
+                .and(ProductSpecification.maxPrice(maxPrice))
+                .and(ProductSpecification.review(review));
+        Page<Product> products = productRepository.findAll(spec, pageable);
+        List<ProductDto> productDtos = new ArrayList<>();
+        for(Product product: products) {
+            boolean isFavorite = user.getFavoriteProducts().contains(product);
+            ProductDto productDto = mapper.toProductDto(product);
+            productDto.setInFavorites(isFavorite);
+            productDtos.add(productDto);
+        }
+        return new PaginationResponse(
+            products.getTotalElements(),
+            size,
+            products.getTotalPages(),
+            page,
+            productDtos
+        );
     }
 
     @Override
@@ -117,5 +147,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ReviewCountDto> productCountByReview() {
         return productRepository.countProductsByReview();
     }
+
+
 
 }

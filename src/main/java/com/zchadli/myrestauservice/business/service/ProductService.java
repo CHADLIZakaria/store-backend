@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.zchadli.myrestauservice.dto.RangePriceCountDto;
 import com.zchadli.myrestauservice.dto.ReviewCountDto;
+import com.zchadli.myrestauservice.entities.Product;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zchadli.myrestauservice.dto.ProductDto;
@@ -19,6 +20,6 @@ public interface ProductService {
     List<ProductDto> findByCategoryIn(String idsCategories);
     List<ProductDto> findByIdNot(Long id);
     List<RangePriceCountDto> productCountByPriceRange();
-
     List<ReviewCountDto> productCountByReview();
+    public PaginationResponse findProductsWithFavorites(String username, int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection);
 }

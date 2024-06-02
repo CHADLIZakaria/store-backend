@@ -66,6 +66,22 @@ public class ProductController {
         return productService.findSearch(page, size, keyword, categories, minPrice, maxPrice, review, sortField, sortDirection);
     }
 
+    @RequestMapping(value = "/products/favorite/{username}", method = RequestMethod.GET)
+    public PaginationResponse getFavorites(
+            @PathVariable String username,
+            @RequestParam(name="page", defaultValue = "0") int page,
+            @RequestParam(name="size", defaultValue = "3") int size,
+            @RequestParam(name="keyword", defaultValue = "") String keyword,
+            @RequestParam(name="categories", defaultValue = "", required = false) List<Integer> categories,
+            @RequestParam(name="minPrice", required = false) Double minPrice,
+            @RequestParam(name="maxPrice", required = false) Double maxPrice,
+            @RequestParam(name="review", required = false) Integer review,
+            @RequestParam(name="sort", defaultValue = "id") String sortField,
+            @RequestParam(name="direction", defaultValue = "asc") String sortDirection
+    ) {
+        return productService.findProductsWithFavorites(username, page, size, keyword, categories, minPrice, maxPrice, review, sortField, sortDirection);
+    }
+
     @RequestMapping(value = "/products/prices/count", method = RequestMethod.GET)
     public List<RangePriceCountDto> productCountByCategory() {
         return productService.productCountByPriceRange();

@@ -3,6 +3,7 @@ package com.zchadli.myrestauservice.repositories;
 import java.util.List;
 
 import com.zchadli.myrestauservice.dto.CategoryCountDto;
+import com.zchadli.myrestauservice.dto.ProductDto;
 import com.zchadli.myrestauservice.dto.RangePriceCountDto;
 import com.zchadli.myrestauservice.dto.ReviewCountDto;
 import org.springframework.data.domain.Page;

@@ -10,4 +10,5 @@ public class ProductDto {
     private String description;
     private String imagePath;
     private CategoryDto category;
+    private boolean inFavorites;
 }
