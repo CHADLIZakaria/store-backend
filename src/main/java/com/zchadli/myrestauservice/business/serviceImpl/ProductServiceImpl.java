@@ -79,8 +79,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponse findProductsWithFavorites(String username, int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection) {
-        RestauUser user = userRepository.findByUsername(username);
+    public PaginationResponse findSearch(int page, int size, Long id, String username, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection) {
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
         Specification<Product> spec = Specification
@@ -88,14 +87,22 @@ public class ProductServiceImpl implements ProductService {
                 .and(ProductSpecification.hasKeyword(keyword))
                 .and(ProductSpecification.minPrice(minPrice))
                 .and(ProductSpecification.maxPrice(maxPrice))
-                .and(ProductSpecification.review(review));
+                .and(ProductSpecification.review(review))
+                .and(ProductSpecification.hasId(id));
         Page<Product> products = productRepository.findAll(spec, pageable);
-        List<ProductDto> productDtos = new ArrayList<>();
-        for(Product product: products) {
-            boolean isFavorite = user.getFavoriteProducts().contains(product);
-            ProductDto productDto = mapper.toProductDto(product);
-            productDto.setInFavorites(isFavorite);
-            productDtos.add(productDto);
+        List<ProductDto> productDtos = null;
+        if(username != null && !username.isEmpty()) {
+            productDtos = new ArrayList<>();
+            RestauUser user = userRepository.findByUsername(username);
+            for(Product product: products) {
+                boolean isFavorite = user.getFavoriteProducts().contains(product);
+                ProductDto productDto = mapper.toProductDto(product);
+                productDto.setInFavorites(isFavorite);
+                productDtos.add(productDto);
+            }
+        }
+        else {
+            productDtos = mapper.toProductsDto(products.getContent());
         }
         return new PaginationResponse(
             products.getTotalElements(),
@@ -103,26 +110,6 @@ public class ProductServiceImpl implements ProductService {
             products.getTotalPages(),
             page,
             productDtos
-        );
-    }
-
-    @Override
-    public PaginationResponse findSearch(int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection) {
-        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
-        Specification<Product> spec = Specification
-                .where(ProductSpecification.hasCategory(categories))
-                .and(ProductSpecification.hasKeyword(keyword))
-                .and(ProductSpecification.minPrice(minPrice))
-                .and(ProductSpecification.maxPrice(maxPrice))
-                .and(ProductSpecification.review(review));
-        Page<Product> products = productRepository.findAll(spec, pageable);
-        return new PaginationResponse(
-            products.getTotalElements(),
-            size,
-            products.getTotalPages(),
-            page,
-            mapper.toProductsDto(products.getContent())
         );
     }
 

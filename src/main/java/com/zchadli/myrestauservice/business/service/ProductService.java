@@ -15,11 +15,10 @@ public interface ProductService {
     List<ProductDto> findAll();
     void deleteById(Long id);
     ProductDto findById(Long id);
-    PaginationResponse findSearch(int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection);
+    PaginationResponse findSearch(int page, int size, Long id, String user, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection);
     Long getNumberPoruducts();
     List<ProductDto> findByCategoryIn(String idsCategories);
     List<ProductDto> findByIdNot(Long id);
     List<RangePriceCountDto> productCountByPriceRange();
     List<ReviewCountDto> productCountByReview();
-    public PaginationResponse findProductsWithFavorites(String username, int page, int size, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection);
 }

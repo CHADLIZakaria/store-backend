@@ -10,6 +10,14 @@ import javax.persistence.criteria.JoinType;
 import java.util.List;
 
 public class ProductSpecification {
+    public static  Specification<Product> hasId(Long id) {
+        return (root, query, criteriaBuilder) -> {
+          if(id==null || id < 0) {
+              return criteriaBuilder.conjunction();
+          }
+          return criteriaBuilder.equal(root.get("id"), id);
+        };
+    }
     public static Specification<Product> hasCategory(List<Integer> ids) {
         return (root, query, criteriaBuilder) -> {
           if(ids == null || ids.isEmpty()) {

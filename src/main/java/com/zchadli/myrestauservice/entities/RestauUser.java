@@ -3,6 +3,7 @@ package com.zchadli.myrestauservice.entities;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -60,4 +61,15 @@ public class RestauUser {
     private Set<Product> favoriteProducts = new HashSet<>();
     @OneToMany(mappedBy = "user")
     private Set<Review> reviews = new HashSet<>();
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return  true;
+        if(object==null || getClass() != object.getClass()) return false;
+        RestauUser user = (RestauUser) object;
+        return getId().equals(user.getId());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
