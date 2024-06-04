@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Table
 @AllArgsConstructor
@@ -20,4 +22,15 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return  true;
+        if(object==null || getClass() != object.getClass()) return false;
+        Role role = (Role) object;
+        return getId().equals(role.getId());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

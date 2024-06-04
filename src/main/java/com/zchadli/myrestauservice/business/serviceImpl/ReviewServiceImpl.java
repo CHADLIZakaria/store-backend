@@ -22,7 +22,6 @@ import com.zchadli.myrestauservice.repositories.ReviewRespository;
 
 import lombok.RequiredArgsConstructor;
 
-
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
@@ -47,7 +46,7 @@ public class ReviewServiceImpl implements ReviewService {
         Pageable pageable;
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
         if(size==null) {
-            pageable = Pageable.unpaged();
+            pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by(direction, sort));
         }
         else {
             pageable = PageRequest.of(page, size, Sort.by(direction, sort));
@@ -79,11 +78,8 @@ public class ReviewServiceImpl implements ReviewService {
         return mapper.toReviewDto(reviewRespository.save(review));
     }
 
-
-
     @Override
     public Long getNumberReviews() {
         return reviewRespository.count();
     }
-    
 }

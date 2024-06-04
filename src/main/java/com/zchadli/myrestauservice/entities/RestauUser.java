@@ -3,6 +3,7 @@ package com.zchadli.myrestauservice.entities;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -46,15 +47,29 @@ public class RestauUser {
     private String email;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
         name="users_roles", 
         joinColumns = @JoinColumn(name="user_id"),
         inverseJoinColumns = @JoinColumn(name="role_id"))
     private Set<Role> roles = new HashSet<>();
-
-    
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name="users_favorites",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="product_id"))
+    private Set<Product> favoriteProducts = new HashSet<>();
     @OneToMany(mappedBy = "user")
     private Set<Review> reviews = new HashSet<>();
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return  true;
+        if(object==null || getClass() != object.getClass()) return false;
+        RestauUser user = (RestauUser) object;
+        return getId().equals(user.getId());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

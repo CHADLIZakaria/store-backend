@@ -2,6 +2,7 @@ package com.zchadli.myrestauservice.specification;
 
 import com.zchadli.myrestauservice.entities.Category;
 import com.zchadli.myrestauservice.entities.Product;
+import com.zchadli.myrestauservice.entities.RestauUser;
 import com.zchadli.myrestauservice.entities.Review;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -10,6 +11,21 @@ import javax.persistence.criteria.JoinType;
 import java.util.List;
 
 public class ProductSpecification {
+    public static Specification<Product> hasId(Long id) {
+        return (root, query, criteriaBuilder) -> {
+          if(id==null || id < 0) {
+              return criteriaBuilder.conjunction();
+          }
+          return criteriaBuilder.equal(root.get("id"), id);
+        };
+    }
+
+    public static Specification<Product> inFavorite(Long idUser) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Product, RestauUser> products = root.join("userFavoriteProduct", JoinType.INNER);
+            return criteriaBuilder.equal(products.get("id"), idUser);
+        };
+    }
     public static Specification<Product> hasCategory(List<Integer> ids) {
         return (root, query, criteriaBuilder) -> {
           if(ids == null || ids.isEmpty()) {
