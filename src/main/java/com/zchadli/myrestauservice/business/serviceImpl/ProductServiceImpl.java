@@ -2,6 +2,7 @@ package com.zchadli.myrestauservice.business.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.zchadli.myrestauservice.dto.*;
 import com.zchadli.myrestauservice.entities.RestauUser;
@@ -79,9 +80,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponse findSearch(int page, int size, Long id, String username, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection) {
+    public PaginationResponse findSearch(int page, Integer size, Long id, String username, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection) {
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
+        Pageable pageable;
+        if(size==null) {
+            pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by(direction, sortField));
+        }
+        else {
+            pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
+        }
         Specification<Product> spec = Specification
                 .where(ProductSpecification.hasCategory(categories))
                 .and(ProductSpecification.hasKeyword(keyword))
@@ -106,13 +113,18 @@ public class ProductServiceImpl implements ProductService {
         }
         return new PaginationResponse(
             products.getTotalElements(),
-            size,
+            size==null ? 0 : size,
             products.getTotalPages(),
             page,
             productDtos
         );
     }
-
+    @Override
+    public List<ProductDto> findFavorites(String username) {
+        RestauUser user = userRepository.findByUsername(username);
+        Specification<Product> spec = Specification.where(ProductSpecification.inFavorite(user.getId()));
+        return mapper.toProductsDto(productRepository.findAll(spec)).stream().peek(productDto -> productDto.setInFavorites(true)).collect(Collectors.toList());
+    }
     @Override
     public List<ProductDto> findByCategoryIn(String idsCategories) {
         if(idsCategories.isEmpty()) return mapper.toProductsDto(productRepository.findAll());
