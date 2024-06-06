@@ -59,13 +59,14 @@ public class ProductController {
         @RequestParam(name="keyword", defaultValue = "") String keyword,
         @RequestParam(name="user", defaultValue = "") String user,
         @RequestParam(name="categories", defaultValue = "", required = false) List<Integer> categories,
+        @RequestParam(name="categoryName", defaultValue = "") String categoryName,
         @RequestParam(name="minPrice", required = false) Double minPrice,
         @RequestParam(name="maxPrice", required = false) Double maxPrice,
         @RequestParam(name="review", required = false) Integer review,
         @RequestParam(name="sort", defaultValue = "id") String sort,
         @RequestParam(name="direction", defaultValue = "asc") String direction
     ) {
-        return productService.findSearch(page, size, id, user, keyword, categories, minPrice, maxPrice, review, sort, direction);
+        return productService.findSearch(page, size, id, user, keyword, categories, categoryName, minPrice, maxPrice, review, sort, direction);
     }
     @RequestMapping(value = "/products/{username}/favorites", method = RequestMethod.GET)
     public List<ProductDto> findFavorites(@PathVariable String username) {

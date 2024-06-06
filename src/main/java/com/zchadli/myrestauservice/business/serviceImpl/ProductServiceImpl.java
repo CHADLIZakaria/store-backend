@@ -80,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponse findSearch(int page, Integer size, Long id, String username, String keyword, List<Integer> categories, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection) {
+    public PaginationResponse findSearch(int page, Integer size, Long id, String username, String keyword, List<Integer> categories, String categoryName, Double minPrice, Double maxPrice, Integer review, String sortField, String sortDirection) {
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
         Pageable pageable;
         if(size==null) {
@@ -95,7 +95,8 @@ public class ProductServiceImpl implements ProductService {
                 .and(ProductSpecification.minPrice(minPrice))
                 .and(ProductSpecification.maxPrice(maxPrice))
                 .and(ProductSpecification.review(review))
-                .and(ProductSpecification.hasId(id));
+                .and(ProductSpecification.hasId(id))
+                .and(ProductSpecification.hasCategoryName(categoryName));
         Page<Product> products = productRepository.findAll(spec, pageable);
         List<ProductDto> productDtos = null;
         if(username != null && !username.isEmpty()) {

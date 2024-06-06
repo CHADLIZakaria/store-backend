@@ -35,6 +35,16 @@ public class ProductSpecification {
           return categories.get("id").in(ids);
         };
     }
+    public static Specification<Product> hasCategoryName(String name) {
+        return (root, query, criteriaBuilder) -> {
+            if(name == null || name.trim().isEmpty()) {
+                return criteriaBuilder.conjunction();
+            }
+            Join<Product, Category> categories = root.join("category", JoinType.INNER);
+
+            return criteriaBuilder.equal(categories.get("name"), name);
+        };
+    }
     public static Specification<Product> hasKeyword(String keyword) {
         return (root, query, criteriaBuilder) -> {
             if(keyword == null || keyword.trim().isEmpty()) {
