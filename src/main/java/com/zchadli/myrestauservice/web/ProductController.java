@@ -73,6 +73,11 @@ public class ProductController {
         return productService.findFavorites(username);
     }
 
+    @RequestMapping(value = "/products/similar/{id}/{idCategory}", method = RequestMethod.GET)
+    public List<ProductDto> findSimilarProducts(@PathVariable Long id, @PathVariable Long idCategory) {
+        return productService.findSimilarProducts(id, idCategory);
+    }
+
     @RequestMapping(value = "/products/prices/count", method = RequestMethod.GET)
     public List<RangePriceCountDto> productCountByCategory() {
         return productService.productCountByPriceRange();

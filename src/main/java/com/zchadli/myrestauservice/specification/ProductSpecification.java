@@ -19,6 +19,14 @@ public class ProductSpecification {
           return criteriaBuilder.equal(root.get("id"), id);
         };
     }
+    public static Specification<Product> hasNotId(Long id) {
+        return (root, query, criteriaBuilder) -> {
+            if(id==null || id < 0) {
+                return criteriaBuilder.conjunction();
+            }
+            return criteriaBuilder.notEqual(root.get("id"), id);
+        };
+    }
 
     public static Specification<Product> inFavorite(Long idUser) {
         return (root, query, criteriaBuilder) -> {

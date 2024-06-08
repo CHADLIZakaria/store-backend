@@ -1,6 +1,7 @@
 package com.zchadli.myrestauservice.business.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -126,6 +127,15 @@ public class ProductServiceImpl implements ProductService {
         Specification<Product> spec = Specification.where(ProductSpecification.inFavorite(user.getId()));
         return mapper.toProductsDto(productRepository.findAll(spec)).stream().peek(productDto -> productDto.setInFavorites(true)).collect(Collectors.toList());
     }
+
+    @Override
+    public List<ProductDto> findSimilarProducts(Long id, Long idCateory) {
+        Specification<Product> spec = Specification
+                .where(ProductSpecification.hasNotId(id))
+                .and(ProductSpecification.hasCategory(Collections.singletonList(idCateory.intValue())));
+        return mapper.toProductsDto(productRepository.findAll(spec));
+    }
+
     @Override
     public List<ProductDto> findByCategoryIn(String idsCategories) {
         if(idsCategories.isEmpty()) return mapper.toProductsDto(productRepository.findAll());

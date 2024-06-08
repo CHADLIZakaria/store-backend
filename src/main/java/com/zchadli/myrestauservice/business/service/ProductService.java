@@ -22,4 +22,5 @@ public interface ProductService {
     List<RangePriceCountDto> productCountByPriceRange();
     List<ReviewCountDto> productCountByReview();
     List<ProductDto> findFavorites(String username);
+    List<ProductDto> findSimilarProducts(Long  id, Long idCategory);
 }
