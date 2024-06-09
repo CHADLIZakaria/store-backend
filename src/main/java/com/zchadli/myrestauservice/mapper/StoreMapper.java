@@ -3,12 +3,9 @@ package com.zchadli.myrestauservice.mapper;
 import java.util.List;
 
 import com.zchadli.myrestauservice.dto.*;
+import com.zchadli.myrestauservice.entities.*;
 import org.mapstruct.Mapper;
-
-import com.zchadli.myrestauservice.entities.Category;
-import com.zchadli.myrestauservice.entities.Product;
-import com.zchadli.myrestauservice.entities.RestauUser;
-import com.zchadli.myrestauservice.entities.Review;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface StoreMapper {
@@ -22,13 +19,24 @@ public interface StoreMapper {
     List<Product> toProducts(List<ProductDto> productsDto);
     List<ProductDto> toProductsDto(List<Product> products);
 
-    RestauUser toUser(UserDto userDto);
-    UserDto toUserDto(RestauUser user);
-    List<RestauUser> toUsers(List<UserDto> usersDto);
-    List<UserDto> toUsersDto(List<RestauUser> users);
+    StoreUser toUser(UserDto userDto);
+    UserDto toUserDto(StoreUser user);
+    List<StoreUser> toUsers(List<UserDto> usersDto);
+    List<UserDto> toUsersDto(List<StoreUser> users);
 
     Review toReview(ReviewDto reviewDto);
     ReviewDto toReviewDto(Review review);
     List<Review> toReviews(List<ReviewDto> reviewsDto);
     List<ReviewDto> toReviewsDto(List<Review> reviews);
+    @Mapping(source = "cardProducts", target = "products")
+    @Mapping(source = "user.id", target = "userId")
+    CartDto toCartDto(Cart cart);
+    List<CartDto> toCartsDto(List<Cart> cart);
+    @Mapping(source = "product.title", target = "title")
+    @Mapping(source = "product.imagePath", target = "imagePath")
+    @Mapping(source = "product.price", target = "price")
+    CartProductDto toCartProductDto(CartProduct cartProduct);
+    List<CartProductDto> toCartProductsDto(List<CartProduct> cartProduct);
+
+
 }

@@ -36,7 +36,7 @@ public class Review {
     private boolean isApproved;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private RestauUser user;
+    private StoreUser user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_product")
     private Product product;

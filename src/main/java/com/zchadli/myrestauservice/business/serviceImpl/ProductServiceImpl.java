@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.zchadli.myrestauservice.dto.*;
-import com.zchadli.myrestauservice.entities.RestauUser;
+import com.zchadli.myrestauservice.entities.StoreUser;
 import com.zchadli.myrestauservice.repositories.UserRepository;
 import com.zchadli.myrestauservice.specification.ProductSpecification;
 import org.springframework.data.domain.Page;
@@ -102,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDto> productDtos = null;
         if(username != null && !username.isEmpty()) {
             productDtos = new ArrayList<>();
-            RestauUser user = userRepository.findByUsername(username);
+            StoreUser user = userRepository.findByUsername(username);
             for(Product product: products) {
                 boolean isFavorite = user.getFavoriteProducts().contains(product);
                 ProductDto productDto = mapper.toProductDto(product);
@@ -123,16 +123,16 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public List<ProductDto> findFavorites(String username) {
-        RestauUser user = userRepository.findByUsername(username);
+        StoreUser user = userRepository.findByUsername(username);
         Specification<Product> spec = Specification.where(ProductSpecification.inFavorite(user.getId()));
         return mapper.toProductsDto(productRepository.findAll(spec)).stream().peek(productDto -> productDto.setInFavorites(true)).collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductDto> findSimilarProducts(Long id, Long idCateory) {
+    public List<ProductDto> findSimilarProducts(Long id, Long idCategory) {
         Specification<Product> spec = Specification
                 .where(ProductSpecification.hasNotId(id))
-                .and(ProductSpecification.hasCategory(Collections.singletonList(idCateory.intValue())));
+                .and(ProductSpecification.hasCategory(Collections.singletonList(idCategory.intValue())));
         return mapper.toProductsDto(productRepository.findAll(spec));
     }
 

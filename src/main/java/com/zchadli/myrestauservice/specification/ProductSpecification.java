@@ -2,7 +2,7 @@ package com.zchadli.myrestauservice.specification;
 
 import com.zchadli.myrestauservice.entities.Category;
 import com.zchadli.myrestauservice.entities.Product;
-import com.zchadli.myrestauservice.entities.RestauUser;
+import com.zchadli.myrestauservice.entities.StoreUser;
 import com.zchadli.myrestauservice.entities.Review;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -30,7 +30,7 @@ public class ProductSpecification {
 
     public static Specification<Product> inFavorite(Long idUser) {
         return (root, query, criteriaBuilder) -> {
-            Join<Product, RestauUser> products = root.join("userFavoriteProduct", JoinType.INNER);
+            Join<Product, StoreUser> products = root.join("userFavoriteProduct", JoinType.INNER);
             return criteriaBuilder.equal(products.get("id"), idUser);
         };
     }
@@ -49,7 +49,6 @@ public class ProductSpecification {
                 return criteriaBuilder.conjunction();
             }
             Join<Product, Category> categories = root.join("category", JoinType.INNER);
-
             return criteriaBuilder.equal(categories.get("name"), name);
         };
     }

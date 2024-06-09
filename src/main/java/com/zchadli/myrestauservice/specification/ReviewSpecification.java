@@ -1,7 +1,7 @@
 package com.zchadli.myrestauservice.specification;
 
 import com.zchadli.myrestauservice.entities.Product;
-import com.zchadli.myrestauservice.entities.RestauUser;
+import com.zchadli.myrestauservice.entities.StoreUser;
 import com.zchadli.myrestauservice.entities.Review;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -41,7 +41,7 @@ public class ReviewSpecification {
             if(username == null || username.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            Join<Review, RestauUser> users = root.join("user", JoinType.INNER);
+            Join<Review, StoreUser> users = root.join("user", JoinType.INNER);
             return criteriaBuilder.equal(users.get("username"), username);
         };
     }

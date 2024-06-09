@@ -2,7 +2,7 @@ package com.zchadli.myrestauservice.business.serviceImpl;
 
 import com.zchadli.myrestauservice.business.service.FavoriteService;
 import com.zchadli.myrestauservice.entities.Product;
-import com.zchadli.myrestauservice.entities.RestauUser;
+import com.zchadli.myrestauservice.entities.StoreUser;
 import com.zchadli.myrestauservice.mapper.StoreMapper;
 import com.zchadli.myrestauservice.repositories.ProductRepository;
 import com.zchadli.myrestauservice.repositories.UserRepository;
@@ -19,7 +19,7 @@ public class FavoriteServiceImpl implements FavoriteService  {
     @Override
     public void addFavorite(String username, Long idProduct) {
         Product product = productRepository.findById(idProduct).orElseThrow(RuntimeException::new);
-        RestauUser user = userRepository.findByUsername(username);
+        StoreUser user = userRepository.findByUsername(username);
         user.getFavoriteProducts().add(product);
         userRepository.save(user);
     }
@@ -27,7 +27,7 @@ public class FavoriteServiceImpl implements FavoriteService  {
     @Override
     public void removeFavorite(String username, Long idProduct) {
         Product product = productRepository.findById(idProduct).orElseThrow(RuntimeException::new);
-        RestauUser user = userRepository.findByUsername(username);
+        StoreUser user = userRepository.findByUsername(username);
         user.getFavoriteProducts().remove(product);
         userRepository.save(user);
     }

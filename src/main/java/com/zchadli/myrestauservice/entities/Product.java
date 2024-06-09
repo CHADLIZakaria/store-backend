@@ -28,7 +28,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Review> reviews;
     @ManyToMany(mappedBy = "favoriteProducts", fetch = FetchType.EAGER)
-    private Set<RestauUser> userFavoriteProduct=new HashSet<>();
+    private Set<StoreUser> userFavoriteProduct=new HashSet<>();
+    @OneToMany(mappedBy = "product")
+    private Set<CartProduct> cardProducts = new HashSet<>();
 
     @Override
     public boolean equals(Object object) {

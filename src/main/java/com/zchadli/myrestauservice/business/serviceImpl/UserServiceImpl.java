@@ -24,7 +24,7 @@ import com.zchadli.myrestauservice.business.service.UserService;
 import com.zchadli.myrestauservice.dto.UserDto;
 import com.zchadli.myrestauservice.entities.CustomUserDetails;
 import com.zchadli.myrestauservice.entities.PaginationResponse;
-import com.zchadli.myrestauservice.entities.RestauUser;
+import com.zchadli.myrestauservice.entities.StoreUser;
 import com.zchadli.myrestauservice.entities.Role;
 import com.zchadli.myrestauservice.mapper.StoreMapper;
 import com.zchadli.myrestauservice.repositories.UserRepository;
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public UserDto saveUser(UserDto userDto, MultipartFile file) {
-        RestauUser user = mapper.toUser(userDto);
+        StoreUser user = mapper.toUser(userDto);
         String pathName = fileService.save(file);
         user.setImagePath(pathName);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        RestauUser user = mapper.toUser(findByUsername(username));
+        StoreUser user = mapper.toUser(findByUsername(username));
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().stream().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public PaginationResponse searchUser(int page, int size, String keyword, String username, String roleName) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<RestauUser> users = null;
+        Page<StoreUser> users = null;
         if(roleName == null || roleName.equals("")) {
             users = userRepository.findByUsernameNotAndUsernameContaining(username, keyword, pageable);
         }
