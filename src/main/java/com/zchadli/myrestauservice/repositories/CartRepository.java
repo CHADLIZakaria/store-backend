@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart, Long>, JpaSpecificationExecutor<Cart> {
-    Optional<Cart> findByUserId(Long userId);
+    Optional<Cart> findByUserUsernameAndIsActive(String username, Boolean isActive);
 }

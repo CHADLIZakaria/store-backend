@@ -19,19 +19,17 @@ public class CartController {
 
     @RequestMapping(value = "/carts/search")
     public List<CartDto> searchCarts(
-        @RequestParam(name="username", value = "", required = false) String username
+        @RequestParam(name="username", value = "") String username
     ) {
         return cartService.searchCarts(username);
     }
 
-    @RequestMapping(value = "/carts/add/{idProduct}", method = RequestMethod.POST)
-    public List<CategoryDto> addProduct(@PathVariable Long idProduct, @RequestBody Long idUser) {
-        cartService.addProduct(idUser, idProduct, OperationEnum.ADD);
-        return null;
+    @RequestMapping(value = "/cart/add/{idProduct}", method = RequestMethod.POST)
+    public void addProduct(@PathVariable Long idProduct, @RequestBody String username) {
+        cartService.addProduct(username, idProduct, OperationEnum.ADD);
     }
-    @RequestMapping(value = "/carts/remove/{idProduct}", method = RequestMethod.POST)
-    public List<CategoryDto> removeProduct(@PathVariable Long idProduct, @RequestBody Long idUser) {
-        cartService.addProduct(idUser, idProduct, OperationEnum.REMOVE);
-        return null;
+    @RequestMapping(value = "/cart/remove/{idProduct}", method = RequestMethod.POST)
+    public void removeProduct(@PathVariable Long idProduct, @RequestBody String username) {
+        cartService.addProduct(username, idProduct, OperationEnum.REMOVE);
     }
 }

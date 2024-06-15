@@ -25,19 +25,15 @@ public class CartServiceImpl implements CartService {
     private final StoreMapper mapper;
     @Override
     @Transactional
-    public void addProduct(Long idUser, Long idProduct, OperationEnum operationEnum) {
-        Optional<Cart> cartOptional = cartRepository.findByUserId(idUser);
-        Cart cart = null;
-        if(!cartOptional.isPresent()) {
+    public void addProduct(String username, Long idProduct, OperationEnum operationEnum) {
+        Cart cart = cartRepository.findByUserUsernameAndIsActive(username, true).orElseGet(() -> {
             Cart cartNotFound = new Cart();
-            cartNotFound.setUser(userRepository.findById(idUser).orElse(new StoreUser()));
-            cart = cartRepository.save(cartNotFound);
-        }
-        else {
-           cart = cartOptional.get();
-        }
+            cartNotFound.setUser(userRepository.findByUsername(username));
+            cartNotFound.setActive(true);
+            return cartRepository.save(cartNotFound);
+        });
         Product product = productRepository.findById(idProduct).orElse(new Product());
-        Optional<CartProduct> existingProduct = cart.getCardProducts().stream().filter(cartProduct -> cartProduct.getProduct().getId().equals(idProduct)).findFirst();
+        Optional<CartProduct> existingProduct = cart.getCartProducts().stream().filter(cartProduct -> cartProduct.getProduct().getId().equals(idProduct)).findFirst();
         if(existingProduct.isPresent()) {
             CartProduct cartProduct = existingProduct.get();
             if(operationEnum == OperationEnum.ADD) {
@@ -52,7 +48,7 @@ public class CartServiceImpl implements CartService {
             cartProduct.setProduct(product);
             cartProduct.setCart(cart);
             cartProduct.setQuantity(1);
-            cart.getCardProducts().add(cartProduct);
+            cart.getCartProducts().add(cartProduct);
         }
         cartRepository.save(cart);
     }

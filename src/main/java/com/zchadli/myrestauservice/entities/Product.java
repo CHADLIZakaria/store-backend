@@ -30,7 +30,7 @@ public class Product {
     @ManyToMany(mappedBy = "favoriteProducts", fetch = FetchType.EAGER)
     private Set<StoreUser> userFavoriteProduct=new HashSet<>();
     @OneToMany(mappedBy = "product")
-    private Set<CartProduct> cardProducts = new HashSet<>();
+    private Set<CartProduct> cartProducts = new HashSet<>();
 
     @Override
     public boolean equals(Object object) {

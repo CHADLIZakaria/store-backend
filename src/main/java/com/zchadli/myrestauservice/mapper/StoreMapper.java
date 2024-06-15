@@ -28,13 +28,15 @@ public interface StoreMapper {
     ReviewDto toReviewDto(Review review);
     List<Review> toReviews(List<ReviewDto> reviewsDto);
     List<ReviewDto> toReviewsDto(List<Review> reviews);
-    @Mapping(source = "cardProducts", target = "products")
+    @Mapping(source = "cartProducts", target = "products")
     @Mapping(source = "user.id", target = "userId")
     CartDto toCartDto(Cart cart);
     List<CartDto> toCartsDto(List<Cart> cart);
+    @Mapping(source = "product.id", target = "idProduct")
     @Mapping(source = "product.title", target = "title")
     @Mapping(source = "product.imagePath", target = "imagePath")
     @Mapping(source = "product.price", target = "price")
+    @Mapping(source = "product.category.name", target = "categoryName")
     CartProductDto toCartProductDto(CartProduct cartProduct);
     List<CartProductDto> toCartProductsDto(List<CartProduct> cartProduct);
 

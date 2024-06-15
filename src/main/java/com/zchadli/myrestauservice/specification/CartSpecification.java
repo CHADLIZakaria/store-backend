@@ -17,4 +17,12 @@ public class CartSpecification {
         };
     }
 
+    public  static  Specification<Cart> isActive(Boolean status) {
+        return (root, query, criteriaBuilder) -> {
+            if(status == null) return criteriaBuilder.conjunction();
+            else {
+                return criteriaBuilder.equal(criteriaBuilder.coalesce(root.get("isActive"), false), status);
+            }
+        };
+    }
 }

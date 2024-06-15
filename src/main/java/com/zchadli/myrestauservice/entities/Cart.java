@@ -16,9 +16,11 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="id_user")
     private StoreUser user;
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private List<CartProduct> cardProducts = new ArrayList<>();
+    private List<CartProduct> cartProducts = new ArrayList<>();
+    @Column(columnDefinition = "boolean default true")
+    private boolean isActive;
 }

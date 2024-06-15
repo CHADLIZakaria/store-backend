@@ -49,8 +49,8 @@ public class StoreUser {
     private Set<Product> favoriteProducts = new HashSet<>();
     @OneToMany(mappedBy = "user")
     private Set<Review> reviews = new HashSet<>();
-    @OneToOne(mappedBy = "user")
-    private Cart card;
+    @OneToMany(mappedBy = "user")
+    private Set<Cart> cart = new HashSet<>();
     @Override
     public boolean equals(Object object) {
         if(this == object) return  true;
